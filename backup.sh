@@ -14,6 +14,11 @@ TMP_DIR="$BACKUP_DIR/tmp_$DATE"
 FINAL_FILE="$BACKUP_DIR/planka_backup_$DATE.tar.gz"
 LOG_FILE="$BACKUP_DIR/backup_$DATE.log"
 
+# FTP Settings
+FTP_HOST="IP"
+FTP_USER="USERNAME"
+FTP_PASS="PASSWORD"
+
 # ========================
 # LOG FUNCTION
 # ========================
@@ -64,6 +69,22 @@ log "📦 Creating final archive: $FINAL_FILE"
 
 tar -czf "$FINAL_FILE" -C "$TMP_DIR" .
 
+# ========================
+# 5. FTP UPLOAD
+# ========================
+log "☁️ Uploading backup to FTP"
+
+lftp -u "$FTP_USER","$FTP_PASS" "$FTP_HOST" <<EOF >> "$LOG_FILE" 2>&1
+set ssl:verify-certificate no
+put $FINAL_FILE
+bye
+EOF
+
+log "✅ FTP upload completed"
+
+# ========================
+# 6. CLEANUP
+# ========================
 log "🧹 Cleaning temporary files"
 rm -rf "$TMP_DIR"
 
