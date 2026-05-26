@@ -2,6 +2,12 @@
 This repository contains scripts to backup and restore planka
 
 ## Backup
+Backup script also contains auto FTP upload (Item 5 in the script).
+To make the FTP upload work, you need to install the package:
+```
+sudo apt update
+sudo apt install lftp
+```
 
 ### Manual:
 ```
